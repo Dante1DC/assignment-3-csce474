@@ -4,8 +4,10 @@ from scipy.io import arff
 import os
 import zipfile
 
-REPO_DIR = "CSCE-474/"
-DATA_DIR = "data/"
+# REPO_DIR = "CSCE-474/"
+# DATA_DIR = "data/"
+REPO_DIR = ""
+DATA_DIR = ""
 
 def arff_to_df(file, directory="", decode_bytes=True):
     """
