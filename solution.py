@@ -5,7 +5,10 @@ import pandas as pd
 
 #Initialize
 k = 2
-df = arff_to_df('fruitfly.arff')
+df = arff_to_df('continuous_fruitfly.arff')
+
+dfNormalized = normalizeDF(df)
+
 smallestError = -1
 	#Fruitfly dataset convergence values:
 	#k=1   ->   72618
@@ -13,11 +16,11 @@ smallestError = -1
 	#k=3   ->   73418 (1000 iterations)
 
 #Repeat the process arbitrarily, looking for the lowest error
-for i in range(1000):
+for i in range(100):
 
 	#Select first seeds randomly
-	randomSelection = df.sample(k)
-	randomSelection = randomSelection.reset_index(drop=True)
+	seedSelection = dfNormalized.sample(k)
+	seedSelection = seedSelection.reset_index(drop=True)
 
 	oldError, currentError = -1, -2
 
@@ -30,12 +33,12 @@ for i in range(1000):
 		#Each item value is a row (point) that belongs to the current cluster. 
 		#Each distance value is the distance from the item to the current centroid. The item is at the same index as its distance
 		distances = [{"items": [], "distances": []} for i in range(k)]
-		for index, item in df.iterrows():
+		for index, item in dfNormalized.iterrows():
 			smallestDistance = -1
 			clusterIndex = 0
 
-			#Loops through the clusters to find which distance to the current item is smaller
-			for kindex, seedItem in randomSelection.iterrows():
+			#Loops through the clusters to find which centroid is closer to the current item
+			for kindex, seedItem in seedSelection.iterrows():
 				distance = getSquaredDistance(seedItem, item)
 				if distance < smallestDistance or smallestDistance == -1:
 					smallestDistance = distance
@@ -55,13 +58,18 @@ for i in range(1000):
 
 		#Convert centroids to DataFrame format for next iteration
 		newSeedDF = {}
-		for index, key in enumerate(df.keys()):
+		for index, key in enumerate(dfNormalized.keys()):
 			newSeedDF[key] = [newCentroids[i][index] for i in range(len(newCentroids))]
-		randomSelection = pd.DataFrame(newSeedDF)
+		seedSelection = pd.DataFrame(newSeedDF)
 
 	#Update smallestError
-	print("Current error:", int(currentError))
+	print("Current error:", round(currentError, 4))
 	if currentError < smallestError or smallestError == -1:
 		smallestError = currentError
 
-print("Global error:", int(smallestError))
+print("Global error:", round(smallestError, 4))
+
+print("\nTotal:\nTHORAX", sum(df['THORAX'])/len(df['THORAX']), "\nSLEEP", sum(df['SLEEP'])/len(df['SLEEP']), "\nclass", sum(df['class'])/len(df['class']))
+
+for index, row in seedSelection.iterrows():
+	print("\nCluster", index, ":\nTHORAX", row['THORAX'] * max(df['THORAX']), "\nSLEEP", row['SLEEP'] * max(df['SLEEP']), "\nclass", row['class'] * max(df['class']))

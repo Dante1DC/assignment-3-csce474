@@ -35,3 +35,14 @@ def getCentroid(items):
 		totalMean[index] = sum(attribute)/len(attribute)
 
 	return totalMean
+
+def normalizeDF(df):
+	newDF = df.copy()
+	for attribute in df:
+		itemRow = df[attribute]
+		maxValue = float(max(itemRow))
+		itemArray = []
+		for item in df[attribute]:
+			itemArray.append(float(item)/maxValue)
+		newDF[attribute] = itemArray
+	return newDF
