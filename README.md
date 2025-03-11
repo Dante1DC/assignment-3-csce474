@@ -1,6 +1,6 @@
 # Setup
 Run the following to ensure you have the right packages:
-`pip install pandas matplotlib scipy`
+`pip install pandas matplotlib scipy arff`
 
 # Usage
 Run `python kmeans.py` to get started.
