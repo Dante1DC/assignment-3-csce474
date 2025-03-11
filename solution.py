@@ -8,9 +8,6 @@ import time
 
 #Initialize
 filename = input(".arff file for analysis: ")
-k = int(input("K: "))
-epsilon = float(input("Epsilon: "))
-iterations = int(input("# of iterations per k: "))
 
 df = arff_to_df('continuous_fruitfly.arff')
 dfNormalized = normalizeDF(df)
