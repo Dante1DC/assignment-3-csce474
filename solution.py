@@ -2,17 +2,21 @@ from util import arff_to_df
 from funcs import *
 import random
 import pandas as pd
+import matplotlib.pyplot as plt
+import math
 
 #Initialize
 df = arff_to_df('continuous_fruitfly.arff')
 dfNormalized = normalizeDF(df)
 
 k = 3
-epsilon = 0.0
-iterations = 500
+epsilon = 0.5
+iterations = 10
 
 smallestDistances, optimalCentroids = [], []
 globalSmallestError = -1
+
+errorList = []
 
 #Repeat the process for each value of k
 for clusterNums in range(k):
@@ -73,6 +77,7 @@ for clusterNums in range(k):
 				break
 			else:
 				smallestError = currentError
+	errorList.append(smallestError)
 	if smallestError < globalSmallestError or globalSmallestError == -1:
 		globalSmallestError = smallestError
 		smallestDistances = distances
@@ -91,3 +96,11 @@ print("\nTotal")
 for header in df.columns:
 	print(header, sum(df[header])/len(df[header]))
 print("Num Items:", len(df), "(", len(df[header])/len(df[header]) * 100,"%)")
+
+kRange = k+1
+print(errorList)
+plt.plot(range(1, k+1), errorList)
+plt.xlim(1, k)
+plt.xticks(range(1, k+1))
+plt.ylim(math.ceil(max(errorList))-2, math.ceil(max(errorList))+2)
+plt.show()
