@@ -1,5 +1,6 @@
 import pandas as pd
-from scipy.io import arff
+import arff
+#from scipy.io import arff
 
 import os
 import zipfile
@@ -10,19 +11,17 @@ REPO_DIR = ""
 DATA_DIR = ""
 
 def arff_to_df(file, directory="", decode_bytes=True):
-    """
-    Load an ARFF file into a pandas DataFrame
-    
-    Arguments:
-    file: str
-        The name of the ARFF file to be loaded
-    directory: str
-        The name of the directory where the ARFF file is located
-        (Assumes the directory is located in the REPO_DIR, and that the ARFF file is located in a directory with the standard name DATA_DIR)
-    decode_bytes: bool
-        Whether to decode bytes to strings in the DataFrame 
-        (most ARFF files contain byte strings)
-    """
+    #Load an ARFF file into a pandas DataFrame
+    #
+    #Arguments:
+    #file: str
+    #    The name of the ARFF file to be loaded
+    #directory: str
+    #    The name of the directory where the ARFF file is located
+    #    (Assumes the directory is located in the REPO_DIR, and that the ARFF file is located in a directory with the standard name DATA_DIR)
+    #decode_bytes: bool
+    #    Whether to decode bytes to strings in the DataFrame 
+    #    (most ARFF files contain byte strings)
     
     repo_dir_name = os.path.basename(os.path.normpath(REPO_DIR))
     active_dir_name = os.path.basename(os.getcwd())
@@ -31,8 +30,7 @@ def arff_to_df(file, directory="", decode_bytes=True):
         data_directory = f"{directory}{DATA_DIR}"
     else:
         data_directory = f"{REPO_DIR}{directory}{DATA_DIR}"
-    
-    df = pd.DataFrame(arff.loadarff(f'{data_directory}{file}')[0])
+    df = pd.DataFrame(arff.load(f'{data_directory}{file}'))
     if decode_bytes:
         for col in df.columns:
             if df[col].dtype == object:
@@ -59,9 +57,7 @@ def create_assignment(assignment, dataset, repo_directory=REPO_DIR, data_directo
 # TODO: include util.py and requirements.txt in all downloads (and data directory)
 # TODO: include terminal arguments for prepare_submission function, ie., py -m prepare_submission.py "CSCE-474/Assignment 2" "test"
 def prepare_submission(folder_name, repo_directory=REPO_DIR, zip_name=None):
-    """
-    Transform the specified folder into a zip file, including all dependencies
-    """
+    # Transform the specified folder into a zip file, including all dependencies
     def zipdir(path, ziph):
         for root, dirs, files in os.walk(path):
             for file in files:

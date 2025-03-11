@@ -22,17 +22,16 @@ globalSmallestError, optimalCluster = -1, -1
 errorList = []
 
 #Repeat the process for each value of k
-for clusterNums in range(1, k+1):
-	print("code")
-	start = time.time()
+for clusterNum in range(1, k+1):
+	print("k =", clusterNum)
 
+	start = time.time()
 	smallestError = -1
 
-	#Repeat the process arbitrarily, looking for the lowest error
 	for i in range(iterations):
 
 		#Select first seeds randomly
-		seedSelection = dfNormalized.sample(clusterNums)
+		seedSelection = dfNormalized.sample(clusterNum)
 		seedSelection = seedSelection.reset_index(drop=True)
 
 		oldError, currentError = -1, -2
@@ -45,7 +44,7 @@ for clusterNums in range(1, k+1):
 			#Each dict has two keys: 'items' and 'distances'. 
 			#Each item value is a row (point) that belongs to the current cluster. 
 			#Each distance value is the distance from the item to the current centroid. The item is at the same index as its distance
-			distances = [{"items": [], "distances": []} for i in range(clusterNums)]
+			distances = [{"items": [], "distances": []} for i in range(clusterNum)]
 			for index, item in dfNormalized.iterrows():
 				smallestDistance = -1
 				clusterIndex = 0
@@ -87,8 +86,9 @@ for clusterNums in range(1, k+1):
 		globalSmallestError = smallestError
 		smallestDistances = distances
 		optimalCentroids = seedSelection
-		optimalCluster = clusterNums
+		optimalCluster = clusterNum
 
+	#Final data capture
 	end = time.time()
 	kTimes.append(end-start)
 	errorList.append(smallestError)
@@ -98,17 +98,20 @@ print("\nGlobal error:", round(globalSmallestError, 4))
 
 print("Optimal # of clusters:", optimalCluster)
 
+#Print k centroids
 for index, row in optimalCentroids.iterrows():
 	print("\nCluster", index+1)
 	for item in row.keys():
 		print(item, row[item] * max(df[item]))
 	print("Num Items:", len(smallestDistances[index]['items']), "(", round(len(smallestDistances[index]['items'])/len(df) * 100, 2),"%)")
 
+#Print global centroid
 print("\nTotal")
 for header in df.columns:
 	print(header, sum(df[header])/len(df[header]))
 print("Num Items:", len(df), "(", len(df[header])/len(df[header]) * 100,"%)")
 
+#Plot Runtime over Cluster Number
 plt.plot(range(1, k+1), kTimes)
 plt.xlim(1, k)
 plt.xticks(range(1, k+1))
@@ -118,6 +121,7 @@ plt.ylabel("Runtime (seconds)")
 plt.savefig("runtime.png")
 plt.show()
 
+#Plot Error over Cluster Number
 plt.plot(range(1, k+1), errorList)
 plt.xlim(1, k)
 plt.xticks(range(1, k+1))
