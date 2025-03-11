@@ -12,7 +12,7 @@ k = int(input("K: "))
 epsilon = float(input("Epsilon: "))
 iterations = int(input("# of iterations per k: "))
 
-df = arff_to_df('continuous_fruitfly.arff')
+df = arff_to_df(filename)
 dfNormalized = normalizeDF(df)
 
 smallestDistances, optimalCentroids, kTimes, errorList = [], [], [], []
