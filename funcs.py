@@ -1,6 +1,6 @@
 import math
 
-def getSquaredDistance(origin, item):
+def getDistance(origin, item):
 	total_distance = 0
 
 	#For each attribute, find the squared difference to the origin and add to the total
@@ -40,9 +40,10 @@ def normalizeDF(df):
 	newDF = df.copy()
 	for attribute in df:
 		itemRow = df[attribute]
+		minValue = float(min(itemRow))
 		maxValue = float(max(itemRow))
 		itemArray = []
 		for item in df[attribute]:
-			itemArray.append(float(item)/maxValue)
+			itemArray.append((float(item)-minValue)/(maxValue-minValue))
 		newDF[attribute] = itemArray
 	return newDF
