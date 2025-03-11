@@ -7,6 +7,11 @@ import math
 import time
 
 #Initialize
+filename = input(".arff file for analysis: ")
+k = int(input("K: "))
+epsilon = float(input("Epsilon: "))
+iterations = int(input("# of iterations per k: "))
+
 df = arff_to_df('continuous_fruitfly.arff')
 dfNormalized = normalizeDF(df)
 
@@ -92,7 +97,7 @@ for clusterNums in range(1, k+1):
 	errorList.append(smallestError)
 
 
-print("Global error:", round(globalSmallestError, 4))
+print("\nGlobal error:", round(globalSmallestError, 4))
 
 print("Optimal # of clusters:", optimalCluster)
 
