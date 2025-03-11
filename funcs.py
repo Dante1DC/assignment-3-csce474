@@ -47,3 +47,16 @@ def normalizeDF(df):
 			itemArray.append((float(item)-minValue)/(maxValue-minValue))
 		newDF[attribute] = itemArray
 	return newDF
+
+def user_parameter_choice(cast_type: type, prompt: str, msg_on_success: str, default, threshold = 0):
+	"""
+	Takes in a user input, casts it to type, and if the input is less than threshold (or the user gave a str or ""), return default. Else, return the input.
+	"""
+	try:
+		c = input(prompt).strip()
+		c = cast_type(c) if cast_type(c) > threshold else default
+	except ValueError:
+		c = default
+	
+	print(f"{msg_on_success} {c}")
+	return c

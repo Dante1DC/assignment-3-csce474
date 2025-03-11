@@ -10,9 +10,9 @@ import time
 df = arff_to_df('continuous_fruitfly.arff')
 dfNormalized = normalizeDF(df)
 
-k = 1
-epsilon = 0.5
-iterations = 100
+k = user_parameter_choice(int, "Select a max number of clusters (default 6): ", "Number of clusters:", 6)
+epsilon = user_parameter_choice(float, "Select a stopping parameter/epsilon (default 0.001): ", "Epsilon:", 0.001)
+iterations = user_parameter_choice(int, "Select the number of iterations (default 100): ", "Iterations:", 100)
 
 smallestDistances, optimalCentroids, kTimes, errorList = [], [], [], []
 globalSmallestError, optimalCluster = -1, -1
@@ -21,6 +21,7 @@ errorList = []
 
 #Repeat the process for each value of k
 for clusterNums in range(1, k+1):
+	print("code")
 	start = time.time()
 
 	smallestError = -1
@@ -112,6 +113,7 @@ plt.xticks(range(1, k+1))
 plt.xlabel("Clusters")
 plt.ylim(0, math.ceil(max(kTimes))+2)
 plt.ylabel("Runtime (seconds)")
+plt.savefig("runtime.png")
 plt.show()
 
 plt.plot(range(1, k+1), errorList)
@@ -120,4 +122,5 @@ plt.xticks(range(1, k+1))
 plt.xlabel("Clusters")
 plt.ylim(0, math.ceil(max(errorList))+2)
 plt.ylabel("Within Cluster Squared Error")
+plt.savefig("clusters.png")
 plt.show()
