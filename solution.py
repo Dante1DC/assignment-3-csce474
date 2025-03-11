@@ -7,12 +7,13 @@ import math
 import time
 
 #Initialize
+filename = input(".arff file for analysis: ")
+k = int(input("K: "))
+epsilon = float(input("Epsilon: "))
+iterations = int(input("# of iterations per k: "))
+
 df = arff_to_df('continuous_fruitfly.arff')
 dfNormalized = normalizeDF(df)
-
-k = 1
-epsilon = 0.5
-iterations = 100
 
 smallestDistances, optimalCentroids, kTimes, errorList = [], [], [], []
 globalSmallestError, optimalCluster = -1, -1
@@ -91,7 +92,7 @@ for clusterNums in range(1, k+1):
 	errorList.append(smallestError)
 
 
-print("Global error:", round(globalSmallestError, 4))
+print("\nGlobal error:", round(globalSmallestError, 4))
 
 print("Optimal # of clusters:", optimalCluster)
 
