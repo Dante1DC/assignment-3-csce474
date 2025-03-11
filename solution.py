@@ -16,7 +16,7 @@ smallestError = -1
 	#k=3   ->   73418 (1000 iterations)
 
 #Repeat the process arbitrarily, looking for the lowest error
-for i in range(100):
+for i in range(10):
 
 	#Select first seeds randomly
 	seedSelection = dfNormalized.sample(k)
@@ -69,7 +69,16 @@ for i in range(100):
 
 print("Global error:", round(smallestError, 4))
 
-print("\nTotal:\nTHORAX", sum(df['THORAX'])/len(df['THORAX']), "\nSLEEP", sum(df['SLEEP'])/len(df['SLEEP']), "\nclass", sum(df['class'])/len(df['class']))
-
+print(len(distances[1]['items']))
 for index, row in seedSelection.iterrows():
-	print("\nCluster", index, ":\nTHORAX", row['THORAX'] * max(df['THORAX']), "\nSLEEP", row['SLEEP'] * max(df['SLEEP']), "\nclass", row['class'] * max(df['class']))
+	print("\nCluster", index)
+	for item in row.keys():
+		print(item, row[item] * max(df[item]))
+	print("Num Items:", len(distances[index]['items']), "(", len(distances[index]['items'])/len(df) * 100,"%)")
+
+print("\nTotal")
+for header in df.columns:
+	print(header, sum(df[header])/len(df[header]))
+print("Num Items:", len(df), "(", len(df[header])/len(df[header]) * 100,"%)")
+
+# print("\nTotal:\nTHORAX", sum(df['THORAX'])/len(df['THORAX']), "\nSLEEP", sum(df['SLEEP'])/len(df['SLEEP']), "\nclass", sum(df['class'])/len(df['class']))
